@@ -31,6 +31,7 @@ import io.temporal.common.converter.DataConverter;
 import io.temporal.internal.common.InternalUtils;
 import io.temporal.internal.common.WorkflowExecutionHistory;
 import io.temporal.internal.replay.WorkflowExecutorCache;
+import io.temporal.internal.sync.ISyncWorkflowWorker;
 import io.temporal.internal.sync.SyncActivityWorker;
 import io.temporal.internal.sync.SyncWorkflowWorker;
 import io.temporal.internal.sync.WorkflowInternal;
@@ -57,7 +58,7 @@ public final class Worker implements Suspendable {
   private final WorkerFactoryOptions factoryOptions;
   private final WorkerOptions options;
   private final String taskQueue;
-  final SyncWorkflowWorker workflowWorker;
+  final ISyncWorkflowWorker workflowWorker;
   final SyncActivityWorker activityWorker;
   private final AtomicBoolean started = new AtomicBoolean();
   private final WorkflowExecutorCache cache;
