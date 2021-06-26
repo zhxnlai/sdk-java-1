@@ -26,6 +26,7 @@ import io.temporal.api.workflowservice.v1.WorkflowServiceGrpc;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.common.interceptors.WorkerInterceptor;
+import io.temporal.internal.sync.SyncReplayWorkflowFactory;
 import io.temporal.worker.Worker;
 import io.temporal.worker.WorkerFactoryOptions;
 import io.temporal.worker.WorkerOptions;
@@ -77,6 +78,7 @@ public class TestWorkflowRule implements TestRule {
   private final WorkflowImplementationOptions workflowImplementationOptions;
   private final WorkerFactoryOptions workerFactoryOptions;
   private final WorkerOptions workerOptions;
+  private final SyncReplayWorkflowFactory syncReplayWorkflowFactory;
 
   private String taskQueue;
   private final TestWorkflowEnvironment testEnvironment;
@@ -90,6 +92,7 @@ public class TestWorkflowRule implements TestRule {
 
   private TestWorkflowRule(Builder builder) {
 
+    syncReplayWorkflowFactory = builder.syncReplayWorkflowFactory;
     doNotStart = builder.doNotStart;
     useExternalService = builder.useExternalService;
     namespace = (builder.namespace == null) ? "UnitTest" : builder.namespace;
@@ -149,8 +152,15 @@ public class TestWorkflowRule implements TestRule {
     private WorkflowClientOptions workflowClientOptions;
     private WorkerFactoryOptions workerFactoryOptions;
     private WorkerOptions workerOptions;
+    private SyncReplayWorkflowFactory syncReplayWorkflowFactory;
 
     protected Builder() {}
+
+    public Builder setSyncReplayWorkflowFactory(
+        SyncReplayWorkflowFactory syncReplayWorkflowFactory) {
+      this.syncReplayWorkflowFactory = syncReplayWorkflowFactory;
+      return this;
+    }
 
     public Builder setWorkerOptions(WorkerOptions options) {
       this.workerOptions = options;
@@ -276,6 +286,7 @@ public class TestWorkflowRule implements TestRule {
     String testMethod = description.getMethodName();
     String taskQueue = "WorkflowTest-" + testMethod + "-" + UUID.randomUUID().toString();
     Worker worker = testEnvironment.newWorker(taskQueue, workerOptions);
+    worker.setSyncReplayWorkflowFactory(syncReplayWorkflowFactory);
     worker.registerWorkflowImplementationTypes(workflowImplementationOptions, workflowTypes);
     worker.registerActivitiesImplementations(activityImplementations);
     return taskQueue;

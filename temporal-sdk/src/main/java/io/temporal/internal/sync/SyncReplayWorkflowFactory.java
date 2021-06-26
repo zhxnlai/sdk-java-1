@@ -12,6 +12,5 @@ public interface SyncReplayWorkflowFactory {
       SyncWorkflowDefinition workflow,
       WorkflowImplementationOptions options,
       DataConverter dataConverter,
-      List<ContextPropagator> contextPropagators
-  );
+      List<ContextPropagator> contextPropagators);
 }

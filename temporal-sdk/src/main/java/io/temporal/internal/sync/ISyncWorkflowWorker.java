@@ -35,4 +35,6 @@ public interface ISyncWorkflowWorker
       Type resultType,
       Object[] args)
       throws Exception;
+
+  void setSyncReplayWorkflowFactory(SyncReplayWorkflowFactory factory);
 }

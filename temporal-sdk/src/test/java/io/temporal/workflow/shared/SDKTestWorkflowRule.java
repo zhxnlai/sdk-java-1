@@ -39,6 +39,7 @@ import io.temporal.client.WorkflowQueryException;
 import io.temporal.client.WorkflowStub;
 import io.temporal.common.interceptors.WorkerInterceptor;
 import io.temporal.internal.common.WorkflowExecutionHistory;
+import io.temporal.internal.sync.SyncReplayWorkflowFactory;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.testing.TestWorkflowEnvironment;
 import io.temporal.testing.TestWorkflowRule;
@@ -102,6 +103,12 @@ public class SDKTestWorkflowRule implements TestRule {
 
     public Builder() {
       testWorkflowRuleBuilder = TestWorkflowRule.newBuilder();
+    }
+
+    public Builder setSyncReplayWorkflowFactory(
+        SyncReplayWorkflowFactory syncReplayWorkflowFactory) {
+      testWorkflowRuleBuilder.setSyncReplayWorkflowFactory(syncReplayWorkflowFactory);
+      return this;
     }
 
     public Builder setWorkerOptions(WorkerOptions options) {

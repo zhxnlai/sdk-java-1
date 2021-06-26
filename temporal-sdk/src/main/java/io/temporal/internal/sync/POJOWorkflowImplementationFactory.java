@@ -43,7 +43,6 @@ import io.temporal.internal.replay.ReplayWorkflowFactory;
 import io.temporal.internal.replay.WorkflowExecutorCache;
 import io.temporal.internal.worker.SingleWorkerOptions;
 import io.temporal.internal.worker.WorkflowExecutionException;
-import io.temporal.worker.CoroutineReplayWorkflow;
 import io.temporal.worker.WorkflowImplementationOptions;
 import io.temporal.workflow.DynamicWorkflow;
 import io.temporal.workflow.Functions.Func;
@@ -58,8 +57,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -239,14 +236,18 @@ public final class POJOWorkflowImplementationFactory implements ReplayWorkflowFa
   }
 
   // TODO(zhixuan) implement this
-  // public void setSyncReplayWorkflowFactory()
+  private SyncReplayWorkflowFactory syncReplayWorkflowFactory = new SyncReplayWorkflowFactoryImpl();
+
+  public void setSyncReplayWorkflowFactory(SyncReplayWorkflowFactory factory) {
+    syncReplayWorkflowFactory = factory;
+  }
 
   @Override
   public ReplayWorkflow getWorkflow(WorkflowType workflowType) {
     SyncWorkflowDefinition workflow = getWorkflowDefinition(workflowType);
     WorkflowImplementationOptions options = implementationOptions.get(workflowType.getName());
-    return new CoroutineReplayWorkflow.Factory()
-        .getWorkflow(workflow, options, dataConverter, contextPropagators);
+    return syncReplayWorkflowFactory.getWorkflow(
+        workflow, options, dataConverter, contextPropagators);
   }
 
   @Override
@@ -256,20 +257,19 @@ public final class POJOWorkflowImplementationFactory implements ReplayWorkflowFa
 
   private class SyncReplayWorkflowFactoryImpl implements SyncReplayWorkflowFactory {
 
-    @NotNull
     @Override
     public ReplayWorkflow getWorkflow(
-        @NotNull SyncWorkflowDefinition workflow,
-        @Nullable WorkflowImplementationOptions options,
-        @NotNull DataConverter dataConverter,
-        @NotNull List<? extends ContextPropagator> contextPropagators) {
+        SyncWorkflowDefinition workflow,
+        WorkflowImplementationOptions options,
+        DataConverter dataConverter,
+        List<ContextPropagator> contextPropagators) {
       return new SyncWorkflow(
           workflow,
           options,
           dataConverter,
           threadPool,
           cache,
-          (List<ContextPropagator>) contextPropagators,
+          contextPropagators,
           defaultDeadlockDetectionTimeout);
     }
   }

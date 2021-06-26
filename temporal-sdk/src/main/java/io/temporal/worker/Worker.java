@@ -33,6 +33,7 @@ import io.temporal.internal.common.WorkflowExecutionHistory;
 import io.temporal.internal.replay.WorkflowExecutorCache;
 import io.temporal.internal.sync.ISyncWorkflowWorker;
 import io.temporal.internal.sync.SyncActivityWorker;
+import io.temporal.internal.sync.SyncReplayWorkflowFactory;
 import io.temporal.internal.sync.SyncWorkflowWorker;
 import io.temporal.internal.sync.WorkflowInternal;
 import io.temporal.internal.worker.PollerOptions;
@@ -434,6 +435,10 @@ public final class Worker implements Suspendable {
       isSuspended = isSuspended && activityWorker.isSuspended();
     }
     return isSuspended;
+  }
+
+  public void setSyncReplayWorkflowFactory(SyncReplayWorkflowFactory factory) {
+    workflowWorker.setSyncReplayWorkflowFactory(factory);
   }
 
   /**

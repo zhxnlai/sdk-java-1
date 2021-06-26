@@ -208,6 +208,11 @@ public class SyncWorkflowWorker implements ISyncWorkflowWorker {
   }
 
   @Override
+  public void setSyncReplayWorkflowFactory(SyncReplayWorkflowFactory factory) {
+    this.factory.setSyncReplayWorkflowFactory(factory);
+  }
+
+  @Override
   public void apply(PollWorkflowTaskQueueResponse pollWorkflowTaskQueueResponse) {
     workflowWorker.apply(pollWorkflowTaskQueueResponse);
   }

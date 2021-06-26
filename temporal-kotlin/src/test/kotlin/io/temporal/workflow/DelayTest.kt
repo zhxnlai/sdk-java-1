@@ -1,5 +1,6 @@
 package io.temporal.workflow
 
+import io.temporal.worker.CoroutineReplayWorkflow
 import io.temporal.worker.KWorkflow
 import io.temporal.workflow.shared.SDKTestWorkflowRule
 import io.temporal.workflow.shared.TestWorkflows.TestWorkflow1
@@ -15,7 +16,10 @@ import java.time.Instant
 class DelayTest {
 
   @get:Rule
-  val testWorkflowRule = SDKTestWorkflowRule.newBuilder().setWorkflowTypes(TestDelay::class.java).build()
+  val testWorkflowRule = SDKTestWorkflowRule.newBuilder()
+    .setWorkflowTypes(TestDelay::class.java)
+    .setSyncReplayWorkflowFactory(CoroutineReplayWorkflow.Factory())
+    .build()
 
   @Test fun testAwait() {
     val workflowStub: TestWorkflow1 =
