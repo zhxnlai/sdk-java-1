@@ -37,7 +37,7 @@ import java.util.Queue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class SignalDispatcher {
+public class SignalDispatcher {
 
   private static class SignalData {
     private final String signalName;

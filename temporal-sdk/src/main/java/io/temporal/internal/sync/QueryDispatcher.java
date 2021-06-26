@@ -31,7 +31,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class QueryDispatcher {
+public class QueryDispatcher {
 
   private static final Logger log = LoggerFactory.getLogger(QueryDispatcher.class);
 

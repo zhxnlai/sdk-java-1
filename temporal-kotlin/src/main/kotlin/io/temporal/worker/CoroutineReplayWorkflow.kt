@@ -16,6 +16,7 @@ import io.temporal.internal.sync.SyncWorkflowDefinition
 import io.temporal.internal.sync.WorkflowExecuteRunnable
 import io.temporal.internal.sync.WorkflowInternal
 import io.temporal.internal.worker.WorkflowExecutionException
+import io.temporal.workflow.WorkflowInfo
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import java.util.Optional
@@ -23,9 +24,18 @@ import java.util.concurrent.CancellationException
 import kotlin.coroutines.EmptyCoroutineContext
 
 object KWorkflow {
+  @JvmStatic
   fun currentTimeMillis(): Long {
     return CoroutineReplayWorkflow.threadLocalDispatcher.get()?.currentTime ?: 0
   }
+
+  @JvmStatic
+  fun getInfo(): WorkflowInfo {
+
+  }
+}
+
+object KWorkflowInternal {
 }
 
 class CoroutineReplayWorkflow(
