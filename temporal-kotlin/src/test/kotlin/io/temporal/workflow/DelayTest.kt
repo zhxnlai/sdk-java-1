@@ -1,5 +1,6 @@
 package io.temporal.workflow
 
+import io.temporal.worker.KWorkflow
 import io.temporal.workflow.shared.SDKTestWorkflowRule
 import io.temporal.workflow.shared.TestWorkflows.TestWorkflow1
 import kotlinx.coroutines.delay
@@ -28,11 +29,12 @@ class DelayTest {
     override fun execute(taskQueue: String) = runBlocking {
       val result = StringBuilder()
       var i = 0
+      println("i=$i,${Instant.ofEpochMilli(KWorkflow.currentTimeMillis())},${Instant.ofEpochMilli(System.currentTimeMillis())}")
       while (i < 5) {
         delay(1000)
         i += 1
-        println("i=$i,${Instant.ofEpochMilli(Workflow.currentTimeMillis())},${Instant.ofEpochMilli(System.currentTimeMillis())}")
-        result.append("i=$i,${Workflow.currentTimeMillis()},${System.currentTimeMillis()}")
+        println("i=$i,${Instant.ofEpochMilli(KWorkflow.currentTimeMillis())},${Instant.ofEpochMilli(System.currentTimeMillis())}")
+        result.append("i=$i,${KWorkflow.currentTimeMillis()},${System.currentTimeMillis()}")
       }
       result.toString()
     }

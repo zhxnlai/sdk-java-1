@@ -43,6 +43,7 @@ import io.temporal.internal.replay.ReplayWorkflowFactory;
 import io.temporal.internal.replay.WorkflowExecutorCache;
 import io.temporal.internal.worker.SingleWorkerOptions;
 import io.temporal.internal.worker.WorkflowExecutionException;
+import io.temporal.worker.CoroutineReplayWorkflow;
 import io.temporal.worker.WorkflowImplementationOptions;
 import io.temporal.workflow.DynamicWorkflow;
 import io.temporal.workflow.Functions.Func;
@@ -244,7 +245,7 @@ public final class POJOWorkflowImplementationFactory implements ReplayWorkflowFa
   public ReplayWorkflow getWorkflow(WorkflowType workflowType) {
     SyncWorkflowDefinition workflow = getWorkflowDefinition(workflowType);
     WorkflowImplementationOptions options = implementationOptions.get(workflowType.getName());
-    return new SyncReplayWorkflowFactoryImpl()
+    return new CoroutineReplayWorkflow.Factory()
         .getWorkflow(workflow, options, dataConverter, contextPropagators);
   }
 

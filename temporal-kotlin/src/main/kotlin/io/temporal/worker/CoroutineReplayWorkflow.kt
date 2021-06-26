@@ -14,6 +14,7 @@ import io.temporal.internal.sync.SyncReplayWorkflowFactory
 import io.temporal.internal.sync.SyncWorkflowContext
 import io.temporal.internal.sync.SyncWorkflowDefinition
 import io.temporal.internal.sync.WorkflowExecuteRunnable
+import io.temporal.internal.sync.WorkflowInternal
 import io.temporal.internal.worker.WorkflowExecutionException
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -21,12 +22,22 @@ import java.util.Optional
 import java.util.concurrent.CancellationException
 import kotlin.coroutines.EmptyCoroutineContext
 
+object KWorkflow {
+  fun currentTimeMillis(): Long {
+    return CoroutineReplayWorkflow.threadLocalDispatcher.get()?.currentTime ?: 0
+  }
+}
+
 class CoroutineReplayWorkflow(
   private val workflow: SyncWorkflowDefinition,
   private val options: WorkflowImplementationOptions,
   private val dataConverter: DataConverter,
   private val contextPropagators: List<ContextPropagator>,
 ) : ReplayWorkflow {
+
+  companion object {
+    val threadLocalDispatcher = ThreadLocal<DelayController>()
+  }
 
   private lateinit var workflowProc: WorkflowExecuteRunnable
   private lateinit var deferred: Deferred<*>
@@ -77,6 +88,7 @@ class CoroutineReplayWorkflow(
 
     val (safeContext, dispatcher) = EmptyCoroutineContext.checkArguments()
     this.dispatcher = dispatcher
+    threadLocalDispatcher.set(this.dispatcher)
     scope = TestCoroutineScope(safeContext)
     deferred = scope.async {
       workflow.initialize()
@@ -123,12 +135,14 @@ class CoroutineReplayWorkflow(
     if (::deferred.isInitialized) {
       deferred.cancel(CancellationException(reason))
     }
+    threadLocalDispatcher.set(null)
   }
 
   override fun close() {
     if (::deferred.isInitialized) {
       deferred.cancel()
     }
+    threadLocalDispatcher.set(null)
   }
 
   override fun query(query: WorkflowQuery): Optional<Payloads> {
