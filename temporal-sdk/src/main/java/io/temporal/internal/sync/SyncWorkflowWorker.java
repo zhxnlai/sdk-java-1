@@ -98,21 +98,25 @@ public class SyncWorkflowWorker implements ISyncWorkflowWorker {
             service, namespace, taskQueue, singleWorkerOptions, taskHandler, stickyTaskQueueName);
   }
 
-  @Override public void registerWorkflowImplementationTypes(
+  @Override
+  public void registerWorkflowImplementationTypes(
       WorkflowImplementationOptions options, Class<?>[] workflowImplementationTypes) {
     factory.registerWorkflowImplementationTypes(options, workflowImplementationTypes);
   }
 
-  @Override public <R> void addWorkflowImplementationFactory(
+  @Override
+  public <R> void addWorkflowImplementationFactory(
       WorkflowImplementationOptions options, Class<R> clazz, Func<R> factory) {
     this.factory.addWorkflowImplementationFactory(options, clazz, factory);
   }
 
-  @Override public <R> void addWorkflowImplementationFactory(Class<R> clazz, Func<R> factory) {
+  @Override
+  public <R> void addWorkflowImplementationFactory(Class<R> clazz, Func<R> factory) {
     this.factory.addWorkflowImplementationFactory(clazz, factory);
   }
 
-  @Override public void registerLocalActivityImplementations(Object... activitiesImplementation) {
+  @Override
+  public void registerLocalActivityImplementations(Object... activitiesImplementation) {
     this.laTaskHandler.registerLocalActivityImplementations(activitiesImplementation);
   }
 

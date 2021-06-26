@@ -19,6 +19,10 @@
 
 package io.temporal.internal.sync;
 
+import static io.temporal.internal.common.HeaderUtils.intoPayloadMapWithDefaultConverter;
+import static io.temporal.internal.common.HeaderUtils.toHeaderGrpc;
+import static io.temporal.internal.common.SerializerUtils.toRetryPolicy;
+
 import com.uber.m3.tally.Scope;
 import io.temporal.activity.ActivityOptions;
 import io.temporal.activity.LocalActivityOptions;
@@ -79,11 +83,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
-import static io.temporal.internal.common.HeaderUtils.intoPayloadMapWithDefaultConverter;
-import static io.temporal.internal.common.HeaderUtils.toHeaderGrpc;
-import static io.temporal.internal.common.SerializerUtils.toRetryPolicy;
-
-final class SyncWorkflowContext implements WorkflowOutboundCallsInterceptor {
+public final class SyncWorkflowContext implements WorkflowOutboundCallsInterceptor {
 
   private final ReplayWorkflowContext context;
   private final DataConverter converter;

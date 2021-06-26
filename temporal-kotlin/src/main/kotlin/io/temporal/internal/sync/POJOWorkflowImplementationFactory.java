@@ -19,6 +19,9 @@
 
 package io.temporal.internal.sync;
 
+import static io.temporal.internal.sync.WorkflowInternal.unwrap;
+import static io.temporal.serviceclient.CheckedExceptionWrapper.wrap;
+
 import com.google.common.base.Preconditions;
 import io.temporal.api.common.v1.Payloads;
 import io.temporal.api.common.v1.WorkflowType;
@@ -54,13 +57,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static io.temporal.internal.sync.WorkflowInternal.unwrap;
-import static io.temporal.serviceclient.CheckedExceptionWrapper.wrap;
-
-final class POJOWorkflowImplementationFactory implements ReplayWorkflowFactory {
+public final class POJOWorkflowImplementationFactory implements ReplayWorkflowFactory {
 
   private static final Logger log =
       LoggerFactory.getLogger(POJOWorkflowImplementationFactory.class);
@@ -211,8 +213,7 @@ final class POJOWorkflowImplementationFactory implements ReplayWorkflowFactory {
   }
 
   private SyncWorkflowDefinition getWorkflowDefinition(WorkflowType workflowType) {
-    Func<SyncWorkflowDefinition> factory =
-        workflowDefinitions.get(workflowType.getName());
+    Func<SyncWorkflowDefinition> factory = workflowDefinitions.get(workflowType.getName());
     if (factory == null) {
       if (dynamicWorkflowImplementationFactory != null) {
         return new DynamicSyncWorkflowDefinition(
@@ -236,23 +237,40 @@ final class POJOWorkflowImplementationFactory implements ReplayWorkflowFactory {
     this.dataConverter = dataConverter;
   }
 
+  // TODO(zhixuan) implement this
+  // public void setSyncReplayWorkflowFactory()
+
   @Override
   public ReplayWorkflow getWorkflow(WorkflowType workflowType) {
     SyncWorkflowDefinition workflow = getWorkflowDefinition(workflowType);
     WorkflowImplementationOptions options = implementationOptions.get(workflowType.getName());
-    return new SyncWorkflow(
-        workflow,
-        options,
-        dataConverter,
-        threadPool,
-        cache,
-        contextPropagators,
-        defaultDeadlockDetectionTimeout);
+    return new SyncReplayWorkflowFactoryImpl()
+        .getWorkflow(workflow, options, dataConverter, contextPropagators);
   }
 
   @Override
   public boolean isAnyTypeSupported() {
     return !workflowDefinitions.isEmpty() || dynamicWorkflowImplementationFactory != null;
+  }
+
+  private class SyncReplayWorkflowFactoryImpl implements SyncReplayWorkflowFactory {
+
+    @NotNull
+    @Override
+    public ReplayWorkflow getWorkflow(
+        @NotNull SyncWorkflowDefinition workflow,
+        @Nullable WorkflowImplementationOptions options,
+        @NotNull DataConverter dataConverter,
+        @NotNull List<? extends ContextPropagator> contextPropagators) {
+      return new SyncWorkflow(
+          workflow,
+          options,
+          dataConverter,
+          threadPool,
+          cache,
+          (List<ContextPropagator>) contextPropagators,
+          defaultDeadlockDetectionTimeout);
+    }
   }
 
   private class POJOWorkflowImplementation implements SyncWorkflowDefinition {
@@ -399,7 +417,7 @@ final class POJOWorkflowImplementationFactory implements ReplayWorkflowFactory {
     }
   }
 
-  static WorkflowExecutionException mapToWorkflowExecutionException(
+  public static WorkflowExecutionException mapToWorkflowExecutionException(
       Throwable exception, DataConverter dataConverter) {
     Throwable e = exception;
     while (e != null) {

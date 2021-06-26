@@ -65,8 +65,7 @@ public final class WorkflowClientInternal implements WorkflowClient {
    * Creates client that connects to an instance of the Temporal Service.
    *
    * @param service client to the Temporal Service endpoint.
-   * @param options Options (like {@link DataConverter} override) for
-   *     configuring client.
+   * @param options Options (like {@link DataConverter} override) for configuring client.
    */
   public static WorkflowClient newInstance(
       WorkflowServiceStubs service, WorkflowClientOptions options) {

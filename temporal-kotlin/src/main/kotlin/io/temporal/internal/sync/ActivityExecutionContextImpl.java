@@ -19,6 +19,8 @@
 
 package io.temporal.internal.sync;
 
+import static io.temporal.serviceclient.MetricsTag.METRICS_TAGS_CALL_OPTIONS_KEY;
+
 import com.uber.m3.tally.Scope;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
@@ -48,8 +50,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static io.temporal.serviceclient.MetricsTag.METRICS_TAGS_CALL_OPTIONS_KEY;
 
 /**
  * Base implementation of an {@link ActivityExecutionContext}.

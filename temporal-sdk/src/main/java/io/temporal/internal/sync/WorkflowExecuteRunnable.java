@@ -25,7 +25,7 @@ import io.temporal.common.interceptors.Header;
 import java.util.Objects;
 import java.util.Optional;
 
-class WorkflowExecuteRunnable implements Runnable {
+public class WorkflowExecuteRunnable implements Runnable {
   private final SyncWorkflowContext context;
   private final SyncWorkflowDefinition workflow;
   private final WorkflowExecutionStartedEventAttributes attributes;

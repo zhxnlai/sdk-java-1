@@ -19,14 +19,14 @@
 
 package io.temporal.internal.sync;
 
+import static io.temporal.internal.sync.DeterministicRunner.getDeadlockDetectionTimeout;
+
 import com.google.common.base.Throwables;
 import io.temporal.workflow.Functions;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.function.Supplier;
-
-import static io.temporal.internal.sync.DeterministicRunner.getDeadlockDetectionTimeout;
 
 class WorkflowThreadContext {
 

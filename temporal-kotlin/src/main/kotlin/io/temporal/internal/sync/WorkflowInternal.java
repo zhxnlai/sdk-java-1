@@ -19,6 +19,8 @@
 
 package io.temporal.internal.sync;
 
+import static io.temporal.internal.sync.AsyncInternal.AsyncMarker;
+
 import com.uber.m3.tally.Scope;
 import io.temporal.activity.ActivityOptions;
 import io.temporal.activity.LocalActivityOptions;
@@ -66,8 +68,6 @@ import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static io.temporal.internal.sync.AsyncInternal.AsyncMarker;
 
 /**
  * Never reference directly. It is public only because Java doesn't have internal package support.
@@ -411,8 +411,7 @@ public final class WorkflowInternal {
     return new WorkflowInfoImpl(getRootWorkflowContext().getContext());
   }
 
-  public static <R> R retry(
-      RetryOptions options, Optional<Duration> expiration, Func<R> fn) {
+  public static <R> R retry(RetryOptions options, Optional<Duration> expiration, Func<R> fn) {
     return WorkflowRetryerInternal.validateOptionsAndRetry(options, expiration, fn);
   }
 

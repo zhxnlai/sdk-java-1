@@ -19,13 +19,13 @@
 
 package io.temporal.internal.sync;
 
+import static io.temporal.internal.sync.DeterministicRunnerImpl.currentThreadInternal;
+
 import io.temporal.failure.CanceledFailure;
 import io.temporal.workflow.CancellationScope;
 import java.util.Optional;
 import java.util.concurrent.Future;
 import java.util.function.Supplier;
-
-import static io.temporal.internal.sync.DeterministicRunnerImpl.currentThreadInternal;
 
 /** Thread that is scheduled deterministically by {@link DeterministicRunner}. */
 interface WorkflowThread extends CancellationScope {

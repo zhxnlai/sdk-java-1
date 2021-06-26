@@ -266,8 +266,7 @@ public final class POJOActivityTaskHandler implements ActivityTaskHandler {
             request.setResult(serialized.get());
           }
         }
-        return new Result(
-            info.getActivityId(), request.build(), null, null, null, false);
+        return new Result(info.getActivityId(), request.build(), null, null, null, false);
       } catch (Throwable e) {
         return activityFailureToResult(info, metricsScope, e);
       }
@@ -350,8 +349,7 @@ public final class POJOActivityTaskHandler implements ActivityTaskHandler {
         if (serialized.isPresent()) {
           request.setResult(serialized.get());
         }
-        return new Result(
-            info.getActivityId(), request.build(), null, null, null, false);
+        return new Result(info.getActivityId(), request.build(), null, null, null, false);
       } catch (Throwable e) {
         return activityFailureToResult(info, metricsScope, e);
       }
@@ -450,8 +448,7 @@ public final class POJOActivityTaskHandler implements ActivityTaskHandler {
             request.setResult(serialized.get());
           }
         }
-        return new Result(
-            info.getActivityId(), request.build(), null, null, null, false);
+        return new Result(info.getActivityId(), request.build(), null, null, null, false);
       } catch (Throwable e) {
         e = CheckedExceptionWrapper.unwrap(e);
         if (log.isWarnEnabled()) {

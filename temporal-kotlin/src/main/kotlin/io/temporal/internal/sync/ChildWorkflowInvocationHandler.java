@@ -19,6 +19,8 @@
 
 package io.temporal.internal.sync;
 
+import static io.temporal.internal.common.InternalUtils.getValueOrDefault;
+
 import io.temporal.common.CronSchedule;
 import io.temporal.common.MethodRetry;
 import io.temporal.common.interceptors.WorkflowOutboundCallsInterceptor;
@@ -30,8 +32,6 @@ import io.temporal.workflow.ChildWorkflowStub;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.Optional;
-
-import static io.temporal.internal.common.InternalUtils.getValueOrDefault;
 
 /** Dynamic implementation of a strongly typed child workflow interface. */
 class ChildWorkflowInvocationHandler implements InvocationHandler {

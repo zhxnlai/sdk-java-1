@@ -19,6 +19,8 @@
 
 package io.temporal.internal.sync;
 
+import static io.temporal.internal.common.LambdaUtils.getTarget;
+
 import io.temporal.common.RetryOptions;
 import io.temporal.internal.common.LambdaUtils;
 import io.temporal.workflow.ActivityStub;
@@ -33,8 +35,6 @@ import java.lang.invoke.SerializedLambda;
 import java.time.Duration;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
-
-import static io.temporal.internal.common.LambdaUtils.getTarget;
 
 /**
  * Contains support for asynchronous invocations. The basic idea is that any code is invoked in a

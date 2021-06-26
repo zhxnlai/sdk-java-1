@@ -19,6 +19,8 @@
 
 package io.temporal.internal.sync;
 
+import static io.temporal.internal.common.InternalUtils.getValueOrDefault;
+
 import com.google.common.annotations.VisibleForTesting;
 import io.temporal.common.MethodRetry;
 import io.temporal.common.metadata.POJOActivityInterfaceMetadata;
@@ -30,8 +32,6 @@ import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-
-import static io.temporal.internal.common.InternalUtils.getValueOrDefault;
 
 /** Dynamic implementation of a strongly typed activity interface. */
 @VisibleForTesting
