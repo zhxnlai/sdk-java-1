@@ -23,7 +23,7 @@ import io.temporal.api.common.v1.Payloads;
 import io.temporal.common.interceptors.Header;
 import java.util.Optional;
 
-interface SyncWorkflowDefinition {
+public interface SyncWorkflowDefinition {
 
   /** Always called first. */
   void initialize();

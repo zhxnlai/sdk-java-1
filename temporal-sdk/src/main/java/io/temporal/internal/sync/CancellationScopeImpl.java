@@ -19,7 +19,10 @@
 
 package io.temporal.internal.sync;
 
-import io.temporal.workflow.*;
+import io.temporal.workflow.CancellationScope;
+import io.temporal.workflow.CompletablePromise;
+import io.temporal.workflow.Functions;
+import io.temporal.workflow.Workflow;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;

@@ -83,7 +83,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
-final class SyncWorkflowContext implements WorkflowOutboundCallsInterceptor {
+public final class SyncWorkflowContext implements WorkflowOutboundCallsInterceptor {
 
   private final ReplayWorkflowContext context;
   private final DataConverter converter;

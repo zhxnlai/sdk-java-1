@@ -411,8 +411,7 @@ public final class WorkflowInternal {
     return new WorkflowInfoImpl(getRootWorkflowContext().getContext());
   }
 
-  public static <R> R retry(
-      RetryOptions options, Optional<Duration> expiration, Functions.Func<R> fn) {
+  public static <R> R retry(RetryOptions options, Optional<Duration> expiration, Func<R> fn) {
     return WorkflowRetryerInternal.validateOptionsAndRetry(options, expiration, fn);
   }
 
