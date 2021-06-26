@@ -9,7 +9,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0"
 
 
-//    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testImplementation project(path: ':temporal-sdk', configuration: 'tests')
+
+    //    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
 //    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     testImplementation project(':temporal-testing-junit4')
     testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
@@ -24,5 +26,5 @@ compileKotlin {
 }
 
 test {
-    useJUnitPlatform()
+    useJUnit()
 }

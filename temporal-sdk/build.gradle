@@ -24,3 +24,19 @@ task registerNamespace(type: JavaExec) {
 }
 
 test.dependsOn 'registerNamespace'
+
+task testsJar(type: Jar, dependsOn: testClasses) {
+    classifier = 'tests'
+    from sourceSets.test.output
+}
+
+configurations {
+    tests
+}
+
+artifacts {
+    tests testsJar
+    archives testsJar
+}
+
+jar.finalizedBy(testsJar)

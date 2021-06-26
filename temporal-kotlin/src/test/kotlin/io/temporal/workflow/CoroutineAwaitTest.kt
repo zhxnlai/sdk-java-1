@@ -7,7 +7,7 @@ import org.junit.Rule
 import org.junit.Test
 import java.time.Duration
 
-class AwaitTest {
+class CoroutineAwaitTest {
 
   @get:Rule
   val testWorkflowRule = SDKTestWorkflowRule.newBuilder().setWorkflowTypes(TestAwait::class.java).build()
