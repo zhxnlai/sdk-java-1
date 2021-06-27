@@ -8,7 +8,7 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.*
 
 /**
- * Executes a [testBody] inside an immediate execution dispatcher.
+ * Executes a [workflowBody] inside an immediate execution dispatcher.
  *
  * This is similar to [runBlocking] but it will immediately progress past delays and into [launch] and [async] blocks.
  * You can use this to write tests that execute in the presence of calls to [delay] without causing your test to take
@@ -29,25 +29,25 @@ import kotlin.coroutines.*
  *
  * ```
  *
- * This method requires that all coroutines launched inside [testBody] complete, or are cancelled, as part of the test
+ * This method requires that all coroutines launched inside [workflowBody] complete, or are cancelled, as part of the test
  * conditions.
  *
  * Unhandled exceptions thrown by coroutines in the test will be re-thrown at the end of the test.
  *
- * @throws UncompletedCoroutinesError If the [testBody] does not complete (or cancel) all coroutines that it launches
+ * @throws UncompletedCoroutinesError If the [workflowBody] does not complete (or cancel) all coroutines that it launches
  * (including coroutines suspended on join/await).
  *
  * @param context additional context elements. If [context] contains [CoroutineDispatcher] or [CoroutineExceptionHandler],
  *        then they must implement [DelayController] and [TestCoroutineExceptionHandler] respectively.
- * @param testBody The code of the unit-test.
+ * @param workflowBody The code of the unit-test.
  */
 @ExperimentalCoroutinesApi // Since 1.2.1, tentatively till 1.3.0
-public fun runBlockingTest(context: CoroutineContext = EmptyCoroutineContext, testBody: suspend TestCoroutineScope.() -> Unit) {
+public fun runBlockingTest(context: CoroutineContext = EmptyCoroutineContext, workflowBody: suspend WorkflowCoroutineScope.() -> Unit) {
     val (safeContext, dispatcher) = context.checkArguments()
     val startingJobs = safeContext.activeJobs()
     val scope = TestCoroutineScope(safeContext)
     val deferred = scope.async {
-        scope.testBody()
+        scope.workflowBody()
     }
     dispatcher.advanceUntilIdle()
     deferred.getCompletionExceptionOrNull()?.let {
@@ -65,18 +65,18 @@ public fun runBlockingTest(context: CoroutineContext = EmptyCoroutineContext, te
 }
 
 /**
- * Convenience method for calling [runBlockingTest] on an existing [TestCoroutineScope].
+ * Convenience method for calling [runBlockingTest] on an existing [WorkflowCoroutineScope].
  */
 // todo: need documentation on how this extension is supposed to be used
 @ExperimentalCoroutinesApi // Since 1.2.1, tentatively till 1.3.0
-public fun TestCoroutineScope.runBlockingTest(block: suspend TestCoroutineScope.() -> Unit): Unit =
+public fun WorkflowCoroutineScope.runBlockingTest(block: suspend WorkflowCoroutineScope.() -> Unit): Unit =
     runBlockingTest(coroutineContext, block)
 
 /**
  * Convenience method for calling [runBlockingTest] on an existing [TestCoroutineDispatcher].
  */
 @ExperimentalCoroutinesApi // Since 1.2.1, tentatively till 1.3.0
-public fun TestCoroutineDispatcher.runBlockingTest(block: suspend TestCoroutineScope.() -> Unit): Unit =
+public fun TestCoroutineDispatcher.runBlockingTest(block: suspend WorkflowCoroutineScope.() -> Unit): Unit =
     runBlockingTest(this, block)
 
  fun CoroutineContext.checkArguments(): Pair<CoroutineContext, DelayController> {

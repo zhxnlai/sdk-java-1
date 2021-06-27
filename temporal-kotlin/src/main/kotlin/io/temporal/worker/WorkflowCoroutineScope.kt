@@ -10,7 +10,7 @@ import kotlin.coroutines.*
 /**
  * A scope which provides detailed control over the execution of coroutines for tests.
  */
-public interface TestCoroutineScope: CoroutineScope, UncaughtExceptionCaptor, DelayController {
+public interface WorkflowCoroutineScope: CoroutineScope, UncaughtExceptionCaptor, DelayController {
     /**
      * Call after the test completes.
      * Calls [UncaughtExceptionCaptor.cleanupTestCoroutines] and [DelayController.cleanupTestCoroutines].
@@ -22,10 +22,10 @@ public interface TestCoroutineScope: CoroutineScope, UncaughtExceptionCaptor, De
     public override fun cleanupTestCoroutines()
 }
 
-private class TestCoroutineScopeImpl (
+private class WorkflowCoroutineScopeImpl (
     override val coroutineContext: CoroutineContext
 ):
-    TestCoroutineScope,
+    WorkflowCoroutineScope,
     UncaughtExceptionCaptor by coroutineContext.uncaughtExceptionCaptor,
     DelayController by coroutineContext.delayController
 {
@@ -45,11 +45,11 @@ private class TestCoroutineScopeImpl (
  */
 @Suppress("FunctionName")
 @ExperimentalCoroutinesApi // Since 1.2.1, tentatively till 1.3.0
-public fun TestCoroutineScope(context: CoroutineContext = EmptyCoroutineContext): TestCoroutineScope {
+public fun TestCoroutineScope(context: CoroutineContext = EmptyCoroutineContext): WorkflowCoroutineScope {
     var safeContext = context
     if (context[ContinuationInterceptor] == null) safeContext += TestCoroutineDispatcher()
     if (context[CoroutineExceptionHandler] == null) safeContext += TestCoroutineExceptionHandler()
-    return TestCoroutineScopeImpl(safeContext)
+    return WorkflowCoroutineScopeImpl(safeContext)
 }
 
 private inline val CoroutineContext.uncaughtExceptionCaptor: UncaughtExceptionCaptor

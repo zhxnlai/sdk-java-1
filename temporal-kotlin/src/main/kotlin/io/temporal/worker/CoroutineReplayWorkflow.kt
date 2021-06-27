@@ -14,7 +14,6 @@ import io.temporal.internal.sync.SyncReplayWorkflowFactory
 import io.temporal.internal.sync.SyncWorkflowContext
 import io.temporal.internal.sync.SyncWorkflowDefinition
 import io.temporal.internal.sync.WorkflowExecuteRunnable
-import io.temporal.internal.sync.WorkflowInternal
 import io.temporal.internal.worker.WorkflowExecutionException
 import io.temporal.workflow.WorkflowInfo
 import kotlinx.coroutines.Deferred
@@ -52,7 +51,7 @@ class CoroutineReplayWorkflow(
   private lateinit var workflowProc: WorkflowExecuteRunnable
   private lateinit var deferred: Deferred<*>
   private lateinit var dispatcher: DelayController
-  private lateinit var scope: TestCoroutineScope
+  private lateinit var scope: WorkflowCoroutineScope
 
   override fun start(event: HistoryEvent, context: ReplayWorkflowContext) {
     require(

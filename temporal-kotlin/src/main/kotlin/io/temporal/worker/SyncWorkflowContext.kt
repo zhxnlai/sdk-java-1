@@ -120,6 +120,15 @@ class SyncWorkflowContext(
   private var defaultActivityOptions: ActivityOptions? = null
   private var activityOptionsMap: MutableMap<String, ActivityOptions>? = HashMap()
 
+  init {
+    signalDispatcher = SignalDispatcher(dataConverter)
+    queryDispatcher = QueryDispatcher(dataConverter)
+    if (workflowImplementationOptions != null) {
+      defaultActivityOptions = workflowImplementationOptions.defaultActivityOptions
+      activityOptionsMap = workflowImplementationOptions.activityOptions
+    }
+  }
+
   constructor(
     context: ReplayWorkflowContext,
     converter: DataConverter,
@@ -760,12 +769,4 @@ class SyncWorkflowContext(
     return context.currentTimeMillis()
   }
 
-  init {
-    signalDispatcher = SignalDispatcher(dataConverter)
-    queryDispatcher = QueryDispatcher(dataConverter)
-    if (workflowImplementationOptions != null) {
-      defaultActivityOptions = workflowImplementationOptions.defaultActivityOptions
-      activityOptionsMap = workflowImplementationOptions.activityOptions
-    }
-  }
 }
